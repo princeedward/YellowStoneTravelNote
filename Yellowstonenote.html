@@ -1,0 +1,689 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Yellowstone Map Notes</title>
+<link rel="stylesheet" href="nanoscroller.css">
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<link rel="stylesheet" href="leaflet.awesome-markers.css">
+<script src="leaflet.awesome-markers.js"></script>
+<script type="text/javascript" src="jquery.nanoscroller.min.js"></script>
+<link rel="stylesheet" href="magnific-popup.css">
+<script src="jquery.magnific-popup.js"></script> 
+<style type="text/css">
+  #map { height: 750px;  width: 60%; position: absolute; left: 4%;  top: 100px;}
+  #Logstics { height: 80px;  width: 60%; position: absolute; left: 4%;  top: 850px;}
+  .title_bar {position: absolute; width: 100%; height: 100px; margin: 0px; top: 0px; left: 0px;}
+  #title {position: absolute; top: 10px; left: 34%; color: #ffffff; width:200px;}
+  #donation{position: absolute; top: 38px; right: 15px; width: 100px; font-family: "Microsoft YaHei","黑体"; font-size: 24px;}
+  #donation a{ color: #888888; font-family: "Microsoft YaHei","黑体"; font-size: 24px; text-decoration: none;}
+  #donation a:hover{color: #bbbbbb; cursor: pointer;}
+  .verticalLine {
+    border-left: thin solid #bbbbbb; position: absolute; left: 66%; top: 100px; height: 800px;
+  }
+  .first_two_ch {font-family: STXingkai,KaiTi,STKaiti; font-size: 56px;}
+  .title_right {font-family: STXihei; font-size: 40px; }
+
+  .nano { position: absolute; left: 68%; top: 100px; width: 30%; height: 800px; padding-right: 0px;}
+  .nano .nano-content { width: 95%; height: 100%}
+  .nano .nano-pane   { background: #888; }
+  .nano .nano-slider { background: #111; }
+
+  /*#hot_spots{position: absolute; left: 68%; top: 100px; width: 30%; height: 800px;}*/
+  .Show_box {position: relative; width: 100%; margin: 5px;}
+  .Show_box figure{ margin: 0; position: absolute; width: 100%; height: 100%}
+  .Show_box figure{ opacity:0;}
+  /*figure:nth-child(1) {
+     animation: xfade 48s 42s infinite;
+  }
+  figure:nth-child(2) {
+     animation: xfade 48s 36s infinite;
+  }
+  figure:nth-child(3) {
+     animation: xfade 48s 30s infinite;
+  }
+  figure:nth-child(4) {
+     animation: xfade 48s 24s infinite;
+  }
+  figure:nth-child(5) {
+     animation: xfade 48s 18s infinite;
+  }
+  figure:nth-child(6) {
+     animation: xfade 48s 12s infinite;
+  }*/
+  .Show_box figure:nth-child(1) {
+     -webkit-animation: xfade 24s 18s infinite;
+     animation: xfade 24s 18s infinite;
+  }
+  .Show_box figure:nth-child(2) {
+      -webkit-animation: xfade 24s 12s infinite;
+     animation: xfade 24s 12s infinite;
+  }
+  .Show_box figure:nth-child(3) {
+    -webkit-animation: xfade 24s 6s infinite;
+     animation: xfade 24s 6s infinite;
+  }
+  .Show_box figure:nth-child(4) {
+    -webkit-animation: xfade 24s 0s infinite;
+     animation: xfade 24s 0s infinite;
+  }
+  .Show_box2 {position: relative; width: 100%; margin: 5px;}
+  .Show_box2 figure{ margin: 0; position: absolute; width: 100%; height: 100%}
+  .Show_box2 figure{ opacity:0;}
+
+  .Show_box2 figure:nth-child(1) {
+     -webkit-animation: xfade2 12s 6s infinite;
+     animation: xfade2 12s 6s infinite;
+  }
+  .Show_box2 figure:nth-child(2) {
+      -webkit-animation: xfade2 12s 0s infinite;
+     animation: xfade2 12s 0s infinite;
+  }
+  @-webkit-keyframes xfade{
+     0%{
+        opacity: 1;
+     }
+     23% {
+        opacity:1;
+     }
+     25% {
+        opacity: 0;
+     }
+     98% {
+        opacity:0;
+     }
+     100% {
+        opacity:1;
+     }
+  }
+  @keyframes xfade{
+     0%{
+        opacity: 1;
+     }
+     23% {
+        opacity:1;
+     }
+     25% {
+        opacity: 0;
+     }
+     98% {
+        opacity:0;
+     }
+     100% {
+        opacity:1;
+     }
+  }
+  @-webkit-keyframes xfade2{
+     0%{
+        opacity: 1;
+     }
+     48% {
+        opacity:1;
+     }
+     50% {
+        opacity: 0;
+     }
+     98% {
+        opacity:0;
+     }
+     100% {
+        opacity:1;
+     }
+  }
+  @keyframes xfade2{
+     0%{
+        opacity: 1;
+     }
+     48% {
+        opacity:1;
+     }
+     50% {
+        opacity: 0;
+     }
+     98% {
+        opacity:0;
+     }
+     100% {
+        opacity:1;
+     }
+  }
+  /*.rotate90 {
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
+    max-height:100%; 
+    height:auto; 
+    width:auto;
+    position: absolute;
+    left: 80px;
+    top: 60px;
+  }*/
+  .caption{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 35px;
+    z-index: 12;
+    background: #000000;
+    opacity:0.5;
+  }
+  .captitle
+  {
+    color: #FFFFFF;
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;;
+    font-size: 24px;
+    padding-left: 20px;
+    line-height: 35px;
+    font-weight: 600;
+  }
+  .captitlechinese
+  {
+    font-family: STXingkai;
+    font-size: 30px;
+  }
+
+  .Instru_words
+  {
+    font-family: STXihei; font-size: 28px; color: #888888; margin-left: 10px; margin-right: 10px;
+  }
+
+  .Details
+  {
+    font-family: STXihei; font-size: 14px; color: #666666; cursor: pointer;
+  }
+  .Details:hover{color: #aaaaaa;}
+
+  /*Define for popup*/
+  .white-popup {
+    position: relative;
+    background: #FFF;
+    padding: 20px;
+    width: auto;
+    max-width: 500px;
+    margin: 20px auto;
+  }
+  .donor
+  {
+    position: relative;
+    background: #FFF;
+    padding: 20px;
+    width: 350px;
+    height: 300px;
+    /*max-width: 00px;*/
+    margin: 20px auto;
+  }
+  .donation-acknowledgement{
+    width: 300px;
+    height: auto;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    margin-left: -150px;
+    font-family: "Microsoft YaHei","黑体"; 
+    font-size: 14px;
+    color: #555555;
+  }
+  .donation-button{
+    width: 250px;
+    height: auto;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    margin-left: -125px;
+    padding-left: 50px;
+  }
+  .mfp-figure img{max-width:1000px;}
+
+  /*Define for gallery*/
+  /* ================================================================ 
+  This copyright notice must be untouched at all times.
+
+  The original version of this stylesheet and the associated (x)html
+  is available at http://www.cssplay.co.uk/menu/gallery3l.html
+  Copyright (c) 2005- Stu Nicholls. All rights reserved.
+  This stylesheet and the associated (x)html may be modified in any 
+  way to fit your requirements.
+  =================================================================== */
+
+ /* #galleryh {
+    padding:0; 
+    margin:0 auto 5em auto; 
+    list-style-type:none; 
+    overflow:hidden; 
+    width:495px; 
+    height:240px; 
+    border:1px solid #888; 
+    background:#fff url(./pic/IMG_5036.jpg);
+    }
+  #galleryh li {
+    float:left;
+    }
+  #galleryh li a {
+    display:block; 
+    height:240px;
+    width:28px; 
+    float:left; 
+    text-decoration:none; 
+    border-right:1px solid #fff; 
+    cursor:default;
+    }
+  #galleryh li a img {
+    width:28px; 
+    height:240px; 
+    border:0;
+    }
+  #galleryh li a:hover {
+    background:#eee; 
+    width:320px;
+    }
+  #galleryh li a:hover img {
+    width:320px;
+    }*/
+
+</style>
+<script type="text/javascript">
+$( document ).ready(function(e){
+  $(".Show_box").css(
+    "height", Math.round(parseInt($(".Show_box").css('width'))*2/3)+"px"
+  );
+  $(".Show_box2").css(
+    "height", Math.round(parseInt($(".Show_box2").css('width'))*2/3)+"px"
+  );
+  $('.support-author').magnificPopup({type:'inline'});
+  // alert($('.open-popup-link').length);
+  // $('.open-popup-link').magnificPopup({
+  //     type:'inline',
+  //     midClick: true // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
+  //   });
+  // $('.rotate90').css('max-width', $(".Show_box").css( "height"));
+
+});
+</script>
+</head>
+<body style="background: #dddddd;">
+  <div class="title_bar">
+    <div id="title"> <font class="first_two_ch">游记</font><font class="title_right">黄石</font> </div>
+    <div id="donation"><a href="#Donation_popup" class="support-author">  支持作者</a></div>
+  </div>
+ <div id="map"></div>
+
+  <script>
+    var southWest = L.latLng(-85, -180),
+    northEast = L.latLng(73, 40),
+    innerbounds = L.latLngBounds(southWest, northEast);
+
+    var ot_southWest = L.latLng(-100, -195),
+    ot_northEast = L.latLng(80, 55),
+    outerbounds = L.latLngBounds(ot_southWest, ot_northEast);
+
+    var map = L.map('map').setView([-36, -70], 2).setMaxBounds(outerbounds);
+
+    L.tileLayer('yellowstonetile/{z}/{x}/{y}.png', {
+      minZoom: 2,
+      maxZoom: 5,
+      attribution: 'Map &copy; <a href="http://www.nps.gov/yell/planyourvisit/upload/YELLmap1.pdf">Yellowstone National Park</a>',
+      id: 'examples.map-i86knfo3',
+      tms: true,
+      bounds: innerbounds
+    }).addTo(map);
+
+    var redMarker = L.AwesomeMarkers.icon({
+      markerColor: 'red'
+    }); // Attractions
+    var blueMarker = L.AwesomeMarkers.icon({
+      markerColor: 'blue'
+    }); //Campground & hotels
+    var orangeMarker = L.AwesomeMarkers.icon({
+      markerColor: 'orange'
+    }); //Food
+    var greenMarker = L.AwesomeMarkers.icon({
+      markerColor: 'green'
+    }); //Animal observation Spot
+
+    var markerLevel2 = new Array();
+    var markerLevel4 = new Array();
+
+    markerLevel2.push(new L.marker([-62.06273, -123.60924], {icon: redMarker})
+      .bindPopup("<center><b>老忠泉 Old Faithful Geyser</b><br>全园彩池，温泉最多的地方</center><div class='Details' align='right'><a class='open-popup-link' point='oldFaithful'>详情</a></div>"));
+    // map.addLayer(markerLevel2[0]);
+
+    // L.marker([-62.06273, -123.60924], {icon: redMarker}).addTo(map)
+    //   .bindPopup("<center><b>老忠泉 Old Faithful Geyser</b><br>全园彩池，温泉最多的地方</center><div class='Details' align='right'>详情</div>");
+
+    markerLevel2.push(new L.marker([-23.72501, -72.23717], {icon: redMarker})
+      .bindPopup("<center><b>上、下瀑布 Upper/Lower Falls</b><br>最壮观的瀑布，可以多角度观赏</center><div class='Details' align='right'>详情</div>"));
+    // map.addLayer(markerLevel2[1]);
+
+    markerLevel2.push(new L.marker([-40.94671, -62.21764], {icon: redMarker})
+      .bindPopup("<center><b>泥火山 Mud Volcano</b><br>不断向外喷吐石灰的火山热泉</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-84.28033, -101.81236], {icon: redMarker})
+      .bindPopup("<center><b>大提顿 Grand Teton</b><br>个人认为应该音译为“提塘”，<br>湖边可以野餐</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-38.68551, -128.2235], {icon: redMarker})
+      .bindPopup("<center><b>融洞谷 Firehole Canyon</b><br>由岩浆冲击冷却形成的山谷</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([12.25413, -108.27232], {icon: redMarker})
+      .bindPopup("<center><b>印第安湾 Indian Creek</b><br>据说是看麋鹿的好地方</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([29.38218, -104.09752], {icon: redMarker})
+      .bindPopup("<center><b>猛犸热泉 Mammoth Hot Spring</b><br>有层次阶梯状的岩石与热泉<br>，当然确实有一个像猛犸一样的泉口</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([12.94032, -54.79088], {icon: redMarker})
+      .bindPopup("<center><b>悬瀑 Tower Falls</b><br>隐藏的特别好，具有<br>欺骗性的瀑布</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([19.22818, -61.03111], {icon: redMarker})
+      .bindPopup("<center><b>飞瀑石崖</b><br>最容易被人忽视的景点，<br>但却异常壮观</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-61.01572, -5.26451], {icon: redMarker})
+      .bindPopup("<center><b>石隙瀑布群</b><br>路旁石间流下的瀑布，<br>刹那间看到给人无限惊喜</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-53.54031, -62.70103], {icon: blueMarker})
+      .bindPopup("<center><b>桥湾 Bridge Bay</b><br>这是园内最冷的露营地，<br>也是我们住的地方</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-30.03106, -101.68052], {icon: blueMarker})
+      .bindPopup("<center><b>猛犸露营地 Mammoth Campground</b><br>据信这里是最暖的露营地，<br>而且据说里泡温泉的地方很近</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-62.37, -123.91685], {icon: blueMarker})
+      .bindPopup("<center><b>老忠泉酒店 Old Faithful Inn</b><br>我看到的最豪华的的酒店<br>，可以在阳台上看老忠泉喷发</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([40.21244, -104.22935], {icon: blueMarker})
+      .bindPopup("<center><b>Gardiner 小镇</b><br>这里有很多motel，虽然在园外，但离园很近</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-62.49203, 38.41713], {icon: blueMarker})
+      .bindPopup("<center><b>Cody 镇</b><br>在黄石东门外的cody镇上<br>有数不清的hotel，motel和格式饭店</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-62.83509, -122.64244], {icon: orangeMarker})
+      .bindPopup("<center><b>老忠泉休息区 Old Faithful Loudge</b><br>在这里有cafeteria，当然<br>还有别的饭店</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-19.93204, -71.13853], {icon: orangeMarker})
+      .bindPopup("<center><b>峡谷村休息区 Canyon Lodge</b><br>这里可以找到另外一家cafeteria，和较大的general store</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-49.49667, -52.06627], {icon: orangeMarker})
+      .bindPopup("<center><b>渔桥休息区 Fishing Bridge</b><br>在general store里有一家简易美式餐厅</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([-34.37971, -66.69113], {icon: greenMarker})
+      .bindPopup("<center><b>熊，鹿，狼和牦牛</b><br>在这附近的平原上可能看到这些动物</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([24.88644, -68.06236], {icon: greenMarker})
+      .bindPopup("<center><b>灰熊和牦牛</b><br>在这附近的路边可能看到这些动物</center><div class='Details' align='right'>详情</div>"));
+
+    markerLevel2.push(new L.marker([10.01213, -108.79967], {icon: greenMarker})
+      .bindPopup("<center><b>麋鹿，和其他的鹿</b><br>这是鹿的栖息地，在早上可能看到四不像哦</center><div class='Details' align='right'>详情</div>"));
+
+    // L.circle([51.508, -0.11], 500, {
+    //   color: 'red',
+    //   fillColor: '#f03',
+    //   fillOpacity: 0.5
+    // }).addTo(map).bindPopup("I am a circle.");
+
+    // L.polygon([
+    //   [51.509, -0.08],
+    //   [51.503, -0.06],
+    //   [51.51, -0.047]
+    // ]).addTo(map).bindPopup("I am a polygon.");
+
+    for(i=0;i<markerLevel2.length;i++){
+      map.addLayer(markerLevel2[i]);
+    }
+    var popup = L.popup();
+
+    function onMapClick(e) {
+      popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+    }
+
+    map.on('click', onMapClick);
+
+    function onMoveEnd(e){
+      // alert('west:'+map.getBounds().getWest()+',south:'+map.getBounds().getSouth());
+    }
+
+    map.on('moveend', onMoveEnd);
+
+    // alert($('.open-popup-link').length);
+    var oldFaithful = [
+      {
+        src: '<div  class="white-popup">HTML string</div>',
+        type: 'inline'
+      },
+      {
+        src: './pic/IMG_4996.jpg'
+      },
+      {
+        src: './pic/IMG_4997.jpg'
+      },
+      {
+        src: './pic/IMG_4999.jpg'
+      },
+      {
+        src: './pic/IMG_5005.jpg'
+      },
+      {
+        src: './pic/IMG_5028.jpg'
+      },
+      {
+        src: './pic/IMG_5036.jpg'
+      },
+      {
+        src: 'https://www.youtube.com/watch?v=CBRYWUq2Ces',
+        type: 'iframe' // this overrides default type
+      }
+    ];
+    map.on('popupopen', function(event) {
+      // alert(window[$('.open-popup-link').attr('point')]);
+      $('.open-popup-link').magnificPopup({
+        items:window[$('.open-popup-link').attr('point')],
+        gallery: {
+          enabled: true
+        },
+        type:'image'});
+      /* Act on the event */
+    });
+
+  </script>
+
+  <div id="Logstics">
+    <div class="awesome-marker-icon-red awesome-marker" style="position: relative; float: left;"><i class=" glyphicon glyphicon-home  icon-white"></i></div>
+    <div class="Instru_words" style="position: relative; float: left; height: 46px; width: auto; line-height: 46px;">景点</div>
+
+    <div class="awesome-marker-icon-blue awesome-marker" style="position: relative; float: left;"><i class=" glyphicon glyphicon-home  icon-white"></i></div>
+    <div class="Instru_words" style="position: relative; float: left; height: 46px; width: auto; line-height: 46px;">营地，酒店或木屋</div>
+
+    <div class="awesome-marker-icon-orange awesome-marker" style="position: relative; float: left;"><i class=" glyphicon glyphicon-home  icon-white"></i></div>
+    <div class="Instru_words" style="position: relative; float: left; height: 46px; width: auto; line-height: 46px;">吃饭或Grocery</div>
+
+    <div class="awesome-marker-icon-green awesome-marker" style="position: relative; float: left;"><i class=" glyphicon glyphicon-home  icon-white"></i></div>
+    <div class="Instru_words" style="position: relative; float: left; height: 46px; width: auto; line-height: 46px;">动物观测点</div>
+  </div>
+
+  <div class="verticalLine"></div>
+
+  <div id="about" class="nano">
+    <div id="hot_spots" class="nano-content">
+      <div id="Old_faithful" class="Show_box">
+        <figure> 
+          <img src="./pic/IMG_4997.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" />
+        </figure> 
+        <figure> 
+          <img src="./pic/IMG_5005.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_5028.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_5036.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <div class="caption"><div class="captitle">Old Faithful <font class="captitlechinese">“老忠泉”</font></div></div>
+      </div>
+
+      <div id="Upper_falls" class="Show_box">
+        <figure> 
+          <img src="./pic/IMG_5163.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" />
+        </figure> 
+        <figure> 
+          <img src="./pic/IMG_5174.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_5187.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_5199.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <div class="caption"><div class="captitle">Upper Falls/ Lower Falls <font class="captitlechinese">“上瀑布、下瀑布”</font></div></div>
+      </div>
+
+      <div id="Mud_volcano" class="Show_box">
+        <figure> 
+          <img src="./pic/IMG_4912.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" />
+        </figure> 
+        <figure> 
+          <img src="./pic/IMG_4897.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_4906.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_4907.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <div class="caption"><div class="captitle">Mud Volcano <font class="captitlechinese">“泥火山”</font></div></div>
+      </div>
+
+      <div id="Grand_teton" class="Show_box">
+        <figure> 
+          <img src="./pic/IMG_4947.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" />
+        </figure> 
+        <figure> 
+          <img src="./pic/IMG_4948.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/Barns_grand_tetons.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/249219.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <div class="caption"><div class="captitle">Grand Teton <font class="captitlechinese">“大提顿”</font></div></div>
+      </div>
+
+      <div id="Firehole_canyon" class="Show_box">
+        <figure> 
+          <img src="./pic/IMG_5107.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" />
+        </figure> 
+        <figure> 
+          <img src="./pic/IMG_5110.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_5111.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_5112.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <div class="caption"><div class="captitle">Fireholw Canyon <font class="captitlechinese">“融洞谷”</font></div></div>
+      </div>
+
+      <div id="Indian_creek" class="Show_box2">
+        <figure> 
+          <img src="./pic/Indian_creek3.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" />
+        </figure> 
+        <figure> 
+          <img src="./pic/Indian_creek4.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <div class="caption"><div class="captitle">Indian Creek<font class="captitlechinese">“印第安湾”</font></div></div>
+      </div>
+
+      <div id="Mammoth_spring" class="Show_box">
+        <figure> 
+          <img src="./pic/IMG_5238.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" />
+        </figure> 
+        <figure> 
+          <img src="./pic/IMG_5241.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_5249.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_5251.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <div class="caption"><div class="captitle">Mammoth Hot Spring <font class="captitlechinese">“猛犸热泉”</font></div></div>
+      </div>
+
+      <div id="Tower_falls" class="Show_box">
+        <figure> 
+          <img src="./pic/IMG_5319.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" />
+        </figure> 
+        <figure> 
+          <img src="./pic/IMG_5324.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/Golden Light on Tower Falls.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/WY_YNP_TowerFalls03.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <div class="caption"><div class="captitle">Tower Falls <font class="captitlechinese">“悬瀑”</font></div></div>
+      </div>
+
+      <div id="Fall_rock" class="Show_box">
+        <figure> 
+          <img src="./pic/IMG_5304.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" />
+        </figure> 
+        <figure> 
+          <img src="./pic/IMG_5307.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/Columnar_basalt_closeup_near_Tower_Fall_in_Yellowstone.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/CDR_229.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <div class="caption"><div class="captitle">On the continetal divide <font class="captitlechinese">“飞瀑石崖”</font></div></div>
+      </div>
+
+      <div id="Fall_rock" class="Show_box">
+        <figure> 
+          <img src="./pic/IMG_5387.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" />
+        </figure> 
+        <figure> 
+          <img src="./pic/IMG_5404.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_5408.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <figure> 
+          <img src="./pic/IMG_5410.jpg" style="max-width:100%; max-height:100%; height:auto; width:auto;" /> 
+        </figure>
+        <div class="caption"><div class="captitle">Falls On the Rock<font class="captitlechinese">“石隙瀑布群”</font></div></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div  id="Donation_popup" class="donor mfp-hide">
+  <div class="donation-acknowledgement">亲爱的各位访客：<p>大家好！</p><p>这个网站是作者花了大量个人时间，夜以继日赶制完成。倾注了很多心血。如果大家喜欢，并觉得有用，同时想鼓励作者继续开发，还请您进行小额的捐赠。作者在这里谢谢大家的支持了，并祝大家黄石之旅玩得开心。</p><p align="right" >阿凯</p></div>
+  <div class="donation-button">
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+    ">
+    <input type="image" src="https://www.paypalobjects.com/zh_XC/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal——最安全便捷的在线支付方式！">
+    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+    </form>
+  </div>
+  </div>
+
+  <script type="text/javascript">
+    // $(".nano").nanoScroller();
+  </script>
+<!-- <script src="jquery.magnific-popup.js"></script>  -->
+</body>
+</html>
